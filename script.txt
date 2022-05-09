@@ -1,0 +1,14 @@
+#删除所有镜像（里面包含'none'的）
+docker rmi $(docker images | grep "none" | awk '{print $3}') 
+
+#停止并删除所有容器
+docker stop $(docker ps -q) & docker rm $(docker ps -aq)
+
+
+#构建镜像
+docker build -f dockerfile.txt -t b2b:1.0 .
+
+#运行容器
+docker run -it -p 5000:5000 --name b2b  -v /usr/local/zsy/docker01/share:/user/local/workspace/share b2b:1.0
+
+
