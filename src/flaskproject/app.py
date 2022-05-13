@@ -9,8 +9,7 @@ import os
 
 app = Flask(__name__, static_folder="./templates")
 
-# filePath = r"./Data_AM_Finance_Accreditation.xlsx"
-filePath = r"./../../data/company_address_finance.xlsx"
+filePath = os.path.join(".", "..", "..", "data", "company_address_finance.xlsx")
 cleanDF = clean_dataframe(filePath)
 
 

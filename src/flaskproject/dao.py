@@ -31,6 +31,8 @@ englishStopwords = stopwords.words('english')
 tf_idf_vectorizer = TfidfVectorizer(analyzer='word', stop_words='english', max_features=100)
 REGEX_ADV_CONST = "[^-:,0-9A-Za-z ]"
 REGEX_BASIC_CONST = "[^-,0-9A-Za-z ]"
+SPACE = " "
+BLANK = ""
 random.seed(42)
 
 
@@ -43,7 +45,7 @@ def basic_text_cleaning(texts):
     cleaned_sentence_text = []
     for txt in texts:
         if pd.isna(txt) or pd.isnull(txt):
-            cleaned_sentence_text.append('')
+            cleaned_sentence_text.append(BLANK)
         else:
             clean_text = txt.lower()
             cleaned_sentence_text.append(clean_text)
@@ -62,8 +64,8 @@ def text_clean(txt, regexp, do_lemmatize, do_stemming, wn: WordNetLemmatizer, ps
     :return: cleaned text
     """
     if pd.isna(txt) or pd.isnull(txt):
-        return ''
-    clean_text = re.sub(regexp, "", txt)
+        return BLANK
+    clean_text = re.sub(regexp, BLANK, txt)
     clean_text = clean_text.lower()
     clean_text = clean_text.split(sep=',')
     clean_text = [word_tokenize(words) for words in clean_text]
@@ -72,7 +74,8 @@ def text_clean(txt, regexp, do_lemmatize, do_stemming, wn: WordNetLemmatizer, ps
         clean_text = [ps.stem(word) for word in clean_text
                       if word not in set(englishStopwords)]
     if do_lemmatize:
-        clean_text = [wn.lemmatize(word) for word in clean_text]
+        clean_text = [wn.lemmatize(word) for word in clean_text
+                      if word not in set(englishStopwords)]
     return clean_text
 
 
@@ -92,13 +95,13 @@ def perform_texts_clean(texts, regexp, do_lemmatize, do_stemming):
     for txt in texts:
         if pd.isna(txt) or pd.isnull(txt):
             cleaned_words_per_text.append([])
-            cleaned_sentence_text.append('')
+            cleaned_sentence_text.append(BLANK)
         else:
             doc = txt
             # Apply regular expression
             clean_text = text_clean(doc, regexp, do_lemmatize, do_stemming, wn, ps)
             cleaned_words_per_text.append(clean_text)
-            cleaned_sentence_text.append(' '.join(clean_text))
+            cleaned_sentence_text.append(SPACE.join(clean_text))
 
     return cleaned_words_per_text, cleaned_sentence_text
 
