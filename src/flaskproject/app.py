@@ -137,9 +137,8 @@ def index2():
 
             final = {}
             count = 1
-            # print(info)
             for name, score, idx in filters_result:
-                temp = cleanDF.loc[index, :].to_dict()
+                temp = cleanDF.loc[idx, :].to_dict()
                 temp['score'] = score
                 data = 'company' + str(count)
                 final[data] = temp
