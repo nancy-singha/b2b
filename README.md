@@ -29,8 +29,17 @@ How to run the docker and deploy the project
    open the flaskproject folder and run the command:
 
    ```
+   cd ./src/flaskproject/
    python ./App.py
    ```
+
+6. run the project
+
+   0.0.0.0:5000/index  ---------------> for  TF_IDF  and  SBERT methods
+
+   0.0.0.0:5000/index_filter   ---------> for filter method
+
+   
 
 6. stop the container
 
