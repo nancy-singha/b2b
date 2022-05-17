@@ -9,7 +9,7 @@ How to run the docker and deploy the project
 1. build the images
 
    ```shell
-   docker build -f dockerfile.txt -t src:1.0 .
+   docker build -f dockerfile.txt -t b2b:1.0 .
    ```
 
 1. run the container
@@ -30,7 +30,7 @@ How to run the docker and deploy the project
 
    ```
    cd ./src/flaskproject/
-   python ./App.py
+   python ./app.py
    ```
 
 6. run the project
