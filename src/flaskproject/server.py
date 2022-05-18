@@ -39,10 +39,11 @@ def clean_dataframe(file_path):
     comp = basic_text_cleaning(company)
 
     cleaned_columns = {'Comp': comp, 'description': descr, 'Capabilities': capab,
-                       'Location': loca, 'Accreditation': accre, 'Revenue': finance_bins, 'Products': prod,
-                       'Projects': proj, 'latitudes': latitudes, 'longitudes': longitudes}
+                       'Accreditation': accre, 'Revenue': finance_bins, 'Products': prod,
+                       'Projects': proj, 'Location': loca, 'latitudes': latitudes, 'longitudes': longitudes}
     clean_df = pd.DataFrame(cleaned_columns)
-    return clean_df
+    actual_address = df['Actual Address'].tolist()
+    return clean_df, actual_address
 
 
 def run_tfidf_vectorizer_model(k, query, clean_df):
@@ -83,9 +84,6 @@ def run_filters_model(k, search_queries: dict, clean_df):
     :return: list of tuples containing company name, score and index of supplier
     """
     print("Use Filters")
-    file_path = os.path.join(".", "..", "..", "data", "company_address_finance.xlsx")
-    clean_df = clean_dataframe(file_path)
-
     num_params = len(search_queries)
 
     if num_params == 1:

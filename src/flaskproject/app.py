@@ -10,7 +10,7 @@ import os
 app = Flask(__name__, static_folder="./templates")
 
 filePath = os.path.join(".", "..", "..", "data", "company_address_finance.xlsx")
-cleanDF = clean_dataframe(filePath)
+cleanDF, addresses = clean_dataframe(filePath)
 
 
 @app.route("/")
@@ -33,9 +33,9 @@ def use_tf_idf_model(search_phrase):
     # get top 5 scores index in ascending order
     final = {}
     count = 1
-    # print(info)
     for name, score, idx in info:
-        temp = cleanDF.loc[idx, :].to_dict()
+        temp = cleanDF.loc[idx, :'Projects'].to_dict()
+        temp['Address'] = addresses[idx]
         temp['score'] = score
         data = 'company' + str(count)
         final[data] = temp
@@ -61,7 +61,8 @@ def use_sbert_model(search_phrase):
     for score, data_index in zip(top_results[0], top_results[1]):
         sco = float(score)
         idx = int(data_index)
-        temp = cleanDF.loc[idx, :].to_dict()
+        temp = cleanDF.loc[idx, :'Projects'].to_dict()
+        temp['Address'] = addresses[idx]
         temp['score'] = sco
         data = 'company' + str(count)
         final[data] = temp
@@ -85,7 +86,8 @@ def use_filters_model(search_queries: dict):
     count = 1
     # print(info)
     for name, score, idx in results:
-        temp = cleanDF.loc[idx, :].to_dict()
+        temp = cleanDF.loc[idx, :'Projects'].to_dict()
+        temp['Address'] = addresses[idx]
         temp['score'] = score
         data = 'company' + str(count)
         final[data] = temp
@@ -120,7 +122,6 @@ def index2():
     if request.method == "GET":
         return render_template("index2.html")
     else:
-
         company_name = request.values.get("company_name")
         capability = request.values.get("capability")
         location = request.values.get("location")
@@ -137,7 +138,8 @@ def index2():
             final = {}
             count = 1
             for name, score, idx in filters_result:
-                temp = cleanDF.loc[idx, :].to_dict()
+                temp = cleanDF.loc[idx, :'Projects'].to_dict()
+                temp['Address'] = addresses[idx]
                 temp['score'] = score
                 data = 'company' + str(count)
                 final[data] = temp
